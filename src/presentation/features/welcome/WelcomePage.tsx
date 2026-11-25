@@ -2,64 +2,75 @@ import React, { useState } from 'react';
 import { WelcomeNavbar } from './components/WelcomeNavbar';
 import { WelcomeHero } from './components/WelcomeHero';
 import { InteractiveLiveDemo } from './components/InteractiveLiveDemo';
+import { ProblemSolutionSection } from './components/ProblemSolutionSection';
 import { BentoFeatures } from './components/BentoFeatures';
+import { TaglineRevealSection } from './components/TaglineRevealSection';
+import { HowItWorksSection } from './components/HowItWorksSection';
+import { RoleCoverageSection } from './components/RoleCoverageSection';
+import { FaqSection } from './components/FaqSection';
+import { FinalCtaSection } from './components/FinalCtaSection';
 import { WelcomeFooter } from './components/WelcomeFooter';
-import { GoogleAuthButton } from '../auth/components/GoogleAuthButton';
+import type { UserRole } from '../dashboard/types/dashboardTypes';
 
 interface WelcomePageProps {
-  onEnterDashboard: () => void;
+  onLoginSuccess: (role: UserRole) => void;
+  onGoToAssistantLogin: () => void;
 }
 
-export const WelcomePage: React.FC<WelcomePageProps> = ({ onEnterDashboard }) => {
+export const WelcomePage: React.FC<WelcomePageProps> = ({
+  onLoginSuccess,
+  onGoToAssistantLogin,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      onEnterDashboard();
-    }, 500);
+      onLoginSuccess('teacher');
+    }, 450);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-indigo-600 selection:text-white flex flex-col justify-between antialiased relative overflow-hidden">
-      {/* Background Soft Ambient Lights */}
-      <div className="absolute top-0 inset-x-0 h-[32rem] bg-gradient-to-b from-indigo-100/60 via-slate-50/50 to-transparent pointer-events-none" />
-      <div className="absolute top-10 start-1/2 -translate-x-1/2 w-[42rem] h-[26rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-[100dvh] bg-[#FAFAFA] text-[#181818] selection:bg-[#181818] selection:text-white antialiased">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#181818] focus:text-white button-sm"
+      >
+        تخطي إلى المحتوى الرئيسي
+      </a>
 
-      <div>
-        {/* Modern Glass Navbar */}
-        <WelcomeNavbar onSignIn={handleGoogleSignIn} />
+      <WelcomeNavbar
+        onGoogleSignIn={handleGoogleSignIn}
+        onAssistantLogin={onGoToAssistantLogin}
+        isLoading={isLoading}
+      />
 
-        {/* Hero Section */}
-        <WelcomeHero onGoogleSignIn={handleGoogleSignIn} isLoading={isLoading} />
+      <main id="main-content">
+        <WelcomeHero
+          onGoogleSignIn={handleGoogleSignIn}
+          onAssistantLogin={onGoToAssistantLogin}
+          isLoading={isLoading}
+        />
 
-        {/* Real Interactive Live Product Demo */}
         <InteractiveLiveDemo />
-
-        {/* 3-Card Bento Highlights */}
+        <ProblemSolutionSection />
         <BentoFeatures />
+        <TaglineRevealSection />
+        <HowItWorksSection />
+        <RoleCoverageSection />
+        <FaqSection />
 
-        {/* Final Conversion CTA Section */}
-        <section className="max-w-4xl mx-auto px-4 py-12 text-center">
-          <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-tr from-indigo-900 via-indigo-950 to-slate-900 text-white shadow-xl relative overflow-hidden">
-            <div className="relative z-10">
-              <h2 className="text-2xl sm:text-4xl font-black mb-3">
-                جاهز توفر ساعات من وجع الدماغ وتضمن فلوسك؟
-              </h2>
-              <p className="text-xs sm:text-sm text-indigo-200 mb-8 max-w-lg mx-auto">
-                ابدأ الآن في أقل من دقيقة. تسجيل فوري بحساب Google بدون أي تعقيدات.
-              </p>
-              <div className="max-w-xs mx-auto">
-                <GoogleAuthButton onClick={handleGoogleSignIn} isLoading={isLoading} />
-              </div>
-            </div>
-          </div>
-        </section>
+        <FinalCtaSection
+          onGoogleSignIn={handleGoogleSignIn}
+          onAssistantLogin={onGoToAssistantLogin}
+          isLoading={isLoading}
+        />
+      </main>
+
+      <div className="px-4 pb-2">
+        <WelcomeFooter onAssistantLogin={onGoToAssistantLogin} />
       </div>
-
-      {/* Clean Footer */}
-      <WelcomeFooter />
     </div>
   );
 };

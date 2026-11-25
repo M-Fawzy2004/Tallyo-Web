@@ -7,12 +7,16 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Cairo', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Geist', 'Cairo', 'system-ui', 'sans-serif'],
+        mono: ['Geist Mono', 'Cairo', 'monospace'],
       },
       screens: {
-        'xs': '420px',
+        xs: '390px',
+      },
+      transitionTimingFunction: {
+        tallyo: 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
     },
   },
   plugins: [],
-}
+};

@@ -1,125 +1,135 @@
 import React, { useState, useEffect } from 'react';
-import { Wallet, QrCode, CheckCircle2, MessageSquare, RefreshCw, Clock } from 'lucide-react';
+import { Wallet, QrCode, CheckCircle, WhatsappLogo, ArrowsClockwise, Clock } from '@phosphor-icons/react';
 import { QRCodeSVG } from 'qrcode.react';
 
 export const InteractiveLiveDemo: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'finance' | 'qr'>('finance');
   const [isPaid, setIsPaid] = useState(false);
+  const [waPreviewShown, setWaPreviewShown] = useState(false);
   const [qrSeconds, setQrSeconds] = useState(20);
+  const [liveTime, setLiveTime] = useState(() => new Date().toLocaleTimeString('en-GB', { hour12: false }));
 
   useEffect(() => {
     if (activeTab !== 'qr') return;
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       setQrSeconds((prev) => (prev <= 1 ? 20 : prev - 1));
+      setLiveTime(new Date().toLocaleTimeString('en-GB', { hour12: false }));
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, [activeTab]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 my-8">
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-indigo-500/10 p-5 sm:p-7 relative overflow-hidden">
-        {/* Widget Top Tab Switcher */}
-        <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100 flex-wrap gap-2">
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
+      <div className="bg-white rounded-3xl border border-zinc-200 p-4 sm:p-6 shadow-sm">
+        {/* Top Switcher Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-1 p-1 bg-zinc-100 rounded-xl border border-zinc-200">
             <button
               type="button"
               onClick={() => setActiveTab('finance')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all min-h-[38px] cursor-pointer ${
-                activeTab === 'finance' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg button-sm motion-base focus-ring cursor-pointer ${
+                activeTab === 'finance' ? 'bg-white text-[#181818] shadow-xs' : 'text-zinc-600 hover:text-[#181818]'
               }`}
             >
-              <Wallet className="w-4 h-4 text-emerald-600" />
-              <span>تجربة: تحصيل المصاريف اللحظي</span>
+              <Wallet size={16} weight="duotone" className="text-emerald-700" />
+              <span>تحصيل المصاريف اللحظي</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('qr')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all min-h-[38px] cursor-pointer ${
-                activeTab === 'qr' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg button-sm motion-base focus-ring cursor-pointer ${
+                activeTab === 'qr' ? 'bg-white text-[#181818] shadow-xs' : 'text-zinc-600 hover:text-[#181818]'
               }`}
             >
-              <QrCode className="w-4 h-4 text-indigo-600" />
-              <span>تجربة: QR الحضور المتغير</span>
+              <QrCode size={16} weight="duotone" className="text-teal-700" />
+              <span>QR الحضور المتغير</span>
             </button>
           </div>
-          <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">
-            ⚡ تجربة تفاعلية حية
+          <span className="caption-3 text-teal-800 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+            معاينة تفاعلية حية
           </span>
         </div>
 
-        {/* TAB 1: Finance Simulation */}
+        {/* Tab 1: Finance Simulation */}
         {activeTab === 'finance' && (
-          <div className="space-y-4">
-            <div className="p-4 sm:p-5 rounded-2xl border border-slate-200/80 bg-slate-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3.5">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-base ${isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+          <div className="space-y-3">
+            <div className="p-4 rounded-2xl border border-zinc-200 bg-zinc-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center title-2 ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
                   أ
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-extrabold text-base text-slate-900">أحمد محمود إبراهيم</h4>
-                    <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
-                      {isPaid ? 'خالص المصاريف (250 ج.م)' : 'متأخر في مصاريف الشهر'}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h4 className="title-3 text-[#181818]">أحمد محمود إبراهيم</h4>
+                    <span className={`caption-3 px-2 py-1 rounded-lg ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
+                      {isPaid ? 'خالص المصاريف (260 ج.م)' : 'متأخر بمبلغ 130 ج.م'}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">الصف الثالث الإعدادي (مجموعة أ) • سنتر الأوائل</p>
+                  <p className="caption-5 text-zinc-600 mt-1">الأول الإعدادي، رياضيات • سنتر الأوائل بالهرم</p>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
                 <button
                   type="button"
-                  onClick={() => setIsPaid(!isPaid)}
-                  className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all min-h-[42px] cursor-pointer active:scale-95 shadow-xs flex items-center gap-1.5 ${
-                    isPaid ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  onClick={() => { setIsPaid(!isPaid); setWaPreviewShown(false); }}
+                  className={`px-3 py-2 rounded-lg button-sm motion-base active:scale-[0.98] focus-ring cursor-pointer min-h-[44px] flex items-center gap-2 ${
+                    isPaid ? 'bg-white border border-zinc-300 text-[#181818]' : 'bg-[#181818] text-white hover:bg-[#272727]'
                   }`}
                 >
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>{isPaid ? 'إلغاء الدفعة (تجربة)' : 'تسجيل دفع 250 ج.م بلمسة'}</span>
+                  <CheckCircle size={18} weight="bold" />
+                  <span>{isPaid ? 'إرجاع الحالة للتجربة' : 'تسجيل سداد 130 ج.م'}</span>
                 </button>
 
                 {!isPaid && (
                   <button
                     type="button"
-                    onClick={() => alert('محاكاة: يتم فتح محادثة واتساب لولي الأمر برسالة مهذبة ومكتملة البيانات فوراً!')}
-                    className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs sm:text-sm font-bold rounded-xl min-h-[42px] shadow-xs active:scale-95 cursor-pointer"
+                    onClick={() => setWaPreviewShown((prev) => !prev)}
+                    className="flex items-center gap-2 px-3 py-2 bg-[#16A34A] hover:bg-[#15803D] text-white button-sm rounded-lg min-h-[44px] motion-base active:scale-[0.98] focus-ring cursor-pointer"
                   >
-                    <MessageSquare className="w-4 h-4" />
+                    <WhatsappLogo size={18} weight="fill" />
                     <span>تذكير واتساب</span>
                   </button>
                 )}
               </div>
             </div>
-            <p className="text-xs text-slate-400 text-center">
-              اضغط على الأزرار بالأعلى لتجربة التحديث التفاؤلي الفوري في أقل من 30ms.
-            </p>
+
+            {waPreviewShown && !isPaid && (
+              <div className="p-4 rounded-2xl border border-emerald-200 bg-emerald-50 caption-4 text-emerald-950">
+                نص التذكير الجاهز لولي الأمر: السلام عليكم ولي أمر الطالب أحمد محمود إبراهيم، متبقي اشتراك الشهر 130 ج.م لمجموعة الأول الإعدادي.
+              </div>
+            )}
           </div>
         )}
 
-        {/* TAB 2: Dynamic Anti-fraud QR Simulation */}
+        {/* Tab 2: QR Simulation */}
         {activeTab === 'qr' && (
-          <div className="flex flex-col md:flex-row items-center justify-around gap-6 py-2">
-            <div className="text-center flex flex-col items-center">
-              <div className="p-3 bg-white border-2 border-slate-900 rounded-2xl shadow-sm mb-3">
-                <QRCodeSVG value={`https://tallyo.app/session-${qrSeconds}`} size={140} level="M" />
+          <div className="flex flex-col md:flex-row items-center justify-around gap-6 p-4 rounded-2xl border border-zinc-200 bg-zinc-50">
+            <div className="text-center flex flex-col items-center gap-3">
+              <div className="p-3 bg-white border border-zinc-300 rounded-2xl">
+                <QRCodeSVG value={`https://tallyo.app/att/demo-${qrSeconds}`} size={136} level="M" />
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-lg">
-                <RefreshCw className={`w-3.5 h-3.5 ${qrSeconds <= 3 ? 'animate-spin' : ''}`} />
-                <span>يتغير الكود بعد: {qrSeconds}s</span>
+              <div className="w-40 h-2 rounded-full bg-zinc-200 overflow-hidden">
+                <div
+                  className={`h-full origin-right transition-transform duration-1000 ease-linear ${qrSeconds <= 4 ? 'bg-rose-600' : 'bg-emerald-600'}`}
+                  style={{ transform: `scaleX(${qrSeconds / 20})` }}
+                />
+              </div>
+              <div className="inline-flex items-center gap-2 caption-3 font-mono text-[#181818] bg-white border border-zinc-200 px-3 py-1 rounded-lg">
+                <ArrowsClockwise size={14} weight="bold" />
+                <span>يتغير الرمز بعد {qrSeconds} ثانية</span>
               </div>
             </div>
 
-            {/* Simulated Student Phone Screen */}
-            <div className="w-full max-w-xs p-4 rounded-2xl bg-emerald-600 text-white text-center shadow-lg">
-              <div className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/20 px-2 py-0.5 rounded-full mb-2">
-                <Clock className="w-3 h-3" />
-                <span>شاشة دخول الطالب على الباب</span>
+            <div className="w-full max-w-xs p-6 rounded-2xl bg-[#047857] text-white text-center border border-[#065F46]">
+              <div className="inline-flex items-center gap-1 caption-4 bg-white/15 px-3 py-1 rounded-full mb-3">
+                <Clock size={14} weight="bold" />
+                <span>شاشة التحقق على الباب</span>
               </div>
-              <h5 className="font-extrabold text-base mb-0.5">خالص المصاريف - ادخل</h5>
-              <p className="text-xs text-emerald-100 mb-2">أحمد محمود • الصف الثالث الإعدادي</p>
-              <div className="bg-white/10 rounded-xl py-1.5 text-xs font-mono font-bold tracking-widest">
-                ساعة حية نشطة لمنع لقطات الشاشة
+              <h4 className="heading-6 mb-1">خالص المصاريف، تفضل بالدخول</h4>
+              <p className="caption-4 text-emerald-100 mb-3">أحمد محمود • الأول الإعدادي</p>
+              <div className="bg-[#064E3B] rounded-lg py-2 px-3 caption-3 font-mono tracking-wider">
+                {liveTime} • توقيت حي لمنع الصور
               </div>
             </div>
           </div>
